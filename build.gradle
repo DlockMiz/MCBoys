@@ -8,7 +8,7 @@ apply plugin: 'io.spring.dependency-management'
 
 
 group = 'com.mcboys'
-version = '0.0.1-SNAPSHOT'
+version = ''
 sourceCompatibility = '1.8'
 
 repositories {
@@ -34,6 +34,14 @@ task reactBuild(type: NodeTask, dependsOn: ["npmInstall"]) {
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	implementation "org.springframework.boot:spring-boot-starter-websocket"
+	implementation "org.webjars:sockjs-client:1.0.2"
+	implementation "org.webjars:stomp-websocket:2.3.3"
+	implementation 'org.springframework.boot:spring-boot-starter-data-redis-reactive'
+}
+
+bootJar {
+	launchScript()
 }
 
 tasks.bootJar.dependsOn(reactBuild)

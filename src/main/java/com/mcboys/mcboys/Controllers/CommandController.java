@@ -1,25 +1,58 @@
 package com.mcboys.mcboys.Controllers;
-
-import org.apache.tomcat.util.http.fileupload.IOUtils;
+import com.mcboys.mcboys.Models.McServer;
+import com.mcboys.mcboys.Repositories.McServerRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import org.springframework.web.bind.annotation.*;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+
+import java.io.*;
+import java.util.List;
+import java.util.Optional;
 
 @RestController
 public class CommandController {
+    McServerRepository repo;
 
-    @GetMapping("/run")
-    public String runCommand() throws Exception {
-        ProcessBuilder processBuilder = new ProcessBuilder("cmd.exe", "/C", "dir");
-        Process process = processBuilder.start();
-        String list = output(process.getInputStream());
-        System.out.println(list);
-        return list;
+    @Value("${mc_server.start.command}")
+    private List<String> start_command;
+    private final SimpMessageSendingOperations template;
+
+    public CommandController(SimpMessageSendingOperations template, McServerRepository repo) {
+        this.template = template;
+        this.repo = repo;
     }
 
-    private static String output(InputStream inputStream) throws IOException {
+
+    @GetMapping("/start_server")
+    public void startServer() throws Exception {
+        ProcessBuilder pb = new ProcessBuilder();
+        File file = new File(System.getProperty("user.dir")+"/mc_server");
+        pb.command(start_command);
+
+        pb.directory(file);
+        Process process = pb.start();
+
+        output(process.getInputStream());
+        output(process.getErrorStream());
+    }
+
+    @GetMapping("/test")
+    public void test(){
+        McServer server = new McServer();
+        server.setServerStatus(McServer.Status.OFF);
+        repo.save(server);
+    }
+
+    @GetMapping("/plz")
+    public void plz(){
+       Iterable<McServer> servers = repo.findAll();
+       for(McServer server : servers){
+           System.out.println(server.id);
+       }
+    }
+
+    private void output(InputStream inputStream) throws IOException {
         StringBuilder sb = new StringBuilder();
         BufferedReader br = null;
         try {
@@ -27,10 +60,11 @@ public class CommandController {
             String line = null;
             while ((line = br.readLine()) != null) {
                 sb.append(line + System.getProperty("line.separator"));
+                this.template.convertAndSend("/mc_server", line);
+                System.out.println(line);
             }
         } finally {
             br.close();
         }
-        return sb.toString();
     }
 }
