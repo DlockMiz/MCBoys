@@ -1,4 +1,4 @@
-package com.mcboys.mcboys.Configs;
+package com.mcboys.mcboys.configs;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.messaging.simp.config.MessageBrokerRegistry;
@@ -12,12 +12,12 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
-        registry.addEndpoint("/ws").setAllowedOrigins("*").withSockJS();
+        registry.addEndpoint("/logs", "/server_status").setAllowedOrigins("*").withSockJS();
     }
 
     @Override
     public void configureMessageBroker(MessageBrokerRegistry config){
-        config.enableSimpleBroker("/mc_server");
+        config.enableSimpleBroker("/logs", "/server_status");
         config.setApplicationDestinationPrefixes("/app");
     }
 }

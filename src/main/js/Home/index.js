@@ -3,90 +3,79 @@ import axios from 'axios'
 import SockJsClient from 'react-stomp';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
+import LinearProgress from '@material-ui/core/LinearProgress';
 import Switch from '@material-ui/core/Switch';
+import {makeStyles, withStyles} from '@material-ui/core/styles';
+import {config} from '../Config/environment'
 import './home.css'
 
 
 class Home extends Component {
     constructor(props) {
         super(props)
+        this.LinearProgress = withStyles({
+            root: {
+                height: 10,
+                backgroundColor: 'lightgreen'
+            },
+            bar: {
+                borderRadius: 20,
+                backgroundColor: 'green',
+            },
+        })(LinearProgress);
      }
 
     state = {
         status: false,
-        websocket_url: "http://67.205.128.141:8080",
-        log_output: "No Current Logs"
+        websocket_url: config.url.WEBSOCKET_URL,
+        log_output: " "
     }
 
     componentDidMount() {
-        this.determineStatusColor()
-        this.determineWebSocketUrl()
-    }
-    test = () =>{
-        var that = this
-        axios.get("/test")
+        this.getServerStatus()
     }
 
-    test1 = () =>{
+    getServerStatus = () =>{
         var that = this
-        axios.get("/plz").then(function(response){
-            console.log(response.data)
+        axios.get("/server_status").then(function(response){
+            var newStatus = response.data == "ON" ? true : false
+            that.setState({status: newStatus})
         })
     }
-
-    determineWebSocketUrl = () =>{
-        var current_url;
-        var local_url = "http://localhost:8080"
-        var live_url = "http://67.205.128.141:8080"
-
-        if(window.location.hostname == 'localhost'){
-            current_url = local_url
-        } else {
-            current_url = live_url
-        }
-        this.setState({websocket_url: current_url})
-    }
-
     serverSwitch = () => {
         this.setState({ status: !this.state.status }, function () {
-             this.determineStatusColor()
-             this.state.status ? this.turnServerOn() : this.turnServerOff() 
+             this.state.status ? axios.get("start_server") : axios.get("/stop_server")
         })
-    }
-
-    turnServerOn = () => {
-        var that = this
-        axios.get("/run")
-    }
-
-    turnServerOff = () => {
-        console.log("off")
-    }
-
-    determineStatusColor = () => {
-        var text = document.getElementById("status")
-        this.state.status ? text.style.color = "green" : text.style.color = "red"
     }
     
     render() {
         return (
             <div>
-                <SockJsClient url={this.state.websocket_url+"/ws"} topics={['/mc_server']}
-                onMessage={(msg) => { this.setState({log_output: this.state.log_output += msg + '\n'}) }}
+                <SockJsClient url={this.state.websocket_url+"/logs"} topics={['/logs']}
+                onMessage={(msg) => {this.setState({log_output: this.state.logoutput += msg + '\n'})}}
                 ref={ (client) => { this.clientRef = client }} />
+
+                <SockJsClient url={this.state.websocket_url+"/server_status"} topics={['/server_status']}
+                onMessage={(msg) => {this.setState({status: msg})}}
+                ref={ (client) => { this.clientRef = client }} />
+                
                 <AppBar position="static">
                     <Toolbar>
                         <h1>The Boys</h1>
                     </Toolbar>
                 </AppBar>
                 <div className="main_wrapper">
-                    <button onClick={this.test}>
+                    {/* <button onClick={this.delete}>
+                        DELETE
+                    </button>
+                    <button onClick={this.yeet}>
                         YEET
-                    </button>
-                    <button onClick={this.test1}>
-                        Skeet
-                    </button>
-                    <div className="column">Server Status: <div id="status">{this.state.status ? "Online" : "Offline"}</div>
+                    </button> */}
+                    <div className="column">Server Status: <div style={this.state.status ? {color:'green'} : {color: 'red'}}>{this.state.status ? "Online" : "Offline"}</div>
+                    <br />
+                    <LinearProgress color="secondary" variant="determinate" value={75} />
+
+                    {this.LinearProgress}
                         <Switch
                             checked={this.state.status}
                             value="checkedB"
