@@ -19,7 +19,7 @@ public class ServerStatusController {
     @Value("${system.jps.command}")
     private List<String> jpsCommand;
     @Value("${mc_server.home.directory")
-
+    private String serverDirectory;
     SimpMessageSendingOperations template;
     ProcessKiller pk;
     LogStream stream;
@@ -51,7 +51,7 @@ public class ServerStatusController {
         if(server.serverStatus.equals(McServer.Status.ON))
             return "Server Already On";
 
-        File file = new File(System.getProperty("user.dir"));
+        File file = new File(serverDirectory);
         pb.command(startCommand);
         pb.directory(file);
 
