@@ -18,7 +18,7 @@ public class ServerStatusController {
     private List<String> startCommand;
     @Value("${system.jps.command}")
     private List<String> jpsCommand;
-    @Value("${mc_server.home.directory")
+    @Value("${mc_server.home.directory}")
     private String serverDirectory;
     SimpMessageSendingOperations template;
     ProcessKiller pk;
