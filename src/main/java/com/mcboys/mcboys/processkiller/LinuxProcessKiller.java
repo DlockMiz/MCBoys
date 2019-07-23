@@ -10,7 +10,6 @@ public class LinuxProcessKiller implements ProcessKiller {
     private String killPidCommand;
     @Autowired
     SimpMessageSendingOperations template;
-    ProcessBuilder pb = new ProcessBuilder();
 
     public void killProcess(String pid) throws Exception{
         String end_command = killPidCommand +" -9 "+ pid;
