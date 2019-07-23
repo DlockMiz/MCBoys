@@ -32,13 +32,6 @@ out/
 ### VS Code ###
 .vscode/
 
-./mc_server/world
-!./mc_server/world/backup.sh
-!./mc_server/world/start.sh
-!./mc_server/world/update.sh
-
-
-
 /mc_server/logs/2019-07-16-1.log
 /mc_server/logs/2019-07-16-2.log
 /mc_server/logs/2019-07-16-3.log
