@@ -10,6 +10,8 @@ import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import org.springframework.web.bind.annotation.*;
 import javax.annotation.PostConstruct;
 import java.io.*;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 
 @RestController
@@ -51,7 +53,7 @@ public class ServerStatusController {
         if(server.serverStatus.equals(McServer.Status.ON))
             return "Server Already On";
 
-        File file = new File(System.getProperty("user.dir")+serverDirectory);
+        File file = new File(serverDirectory);
         pb.command(startCommand);
         pb.directory(file);
 
