@@ -4,7 +4,6 @@ import com.mcboys.mcboys.logstream.LogStream;
 import com.mcboys.mcboys.models.McServer;
 import com.mcboys.mcboys.processkiller.ProcessKiller;
 import com.mcboys.mcboys.repositories.McServerRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.messaging.simp.SimpMessageSendingOperations;
@@ -17,9 +16,9 @@ import java.util.List;
 public class ServerStatusController {
     @Value("${mc_server.start.command}")
     private List<String> startCommand;
-
     @Value("${system.jps.command}")
     private List<String> jpsCommand;
+    @Value("${mc_server.home.directory")
 
     SimpMessageSendingOperations template;
     ProcessKiller pk;
