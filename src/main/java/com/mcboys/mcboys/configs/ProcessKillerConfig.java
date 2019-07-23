@@ -8,13 +8,13 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class ProcessKillerConfig {
-    @Bean
+    @Bean("processKiller")
     @Conditional(WindowsCondition.class)
     public WindowsProcessKiller windowsProcessKiller(){
         return new WindowsProcessKiller();
     }
 
-    @Bean
+    @Bean("processKiller")
     @Conditional(LinuxCondition.class)
     public LinuxProcessKiller linuxProcessKiller(){
         return new LinuxProcessKiller();

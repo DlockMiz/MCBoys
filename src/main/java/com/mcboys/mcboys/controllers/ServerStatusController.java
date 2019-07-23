@@ -5,6 +5,7 @@ import com.mcboys.mcboys.models.McServer;
 import com.mcboys.mcboys.processkiller.ProcessKiller;
 import com.mcboys.mcboys.repositories.McServerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import org.springframework.web.bind.annotation.*;
@@ -13,16 +14,14 @@ import java.io.*;
 import java.util.List;
 
 @RestController
-public class CommandController {
+public class ServerStatusController {
     @Value("${mc_server.start.command}")
     private List<String> startCommand;
 
     @Value("${system.jps.command}")
     private List<String> jpsCommand;
 
-    @Autowired
     SimpMessageSendingOperations template;
-
     ProcessKiller pk;
     LogStream stream;
     ProcessBuilder pb = new ProcessBuilder();
@@ -31,15 +30,21 @@ public class CommandController {
     Process process;
 
 
-    public CommandController(McServerRepository repo, LogStream stream, ProcessKiller pk) {
+    public ServerStatusController(McServerRepository repo, LogStream stream, @Qualifier("processKiller") ProcessKiller pk, SimpMessageSendingOperations template) {
         this.repo = repo;
         this.stream = stream;
         this.pk = pk;
+        this.template = template;
     }
 
-    @GetMapping("/send")
-    public void getServer(){
-        System.out.println(repo.findAll());
+    @GetMapping("/server_status")
+    public String getServerStatus(){
+        return server.serverStatus.name();
+    }
+
+    @GetMapping("/delete")
+    public void delete(){
+        repo.deleteAll();
     }
 
     @GetMapping("/start_server")
@@ -67,22 +72,11 @@ public class CommandController {
         pb.command(jpsCommand);
         Process processList = pb.start();
         String pidNum = stream.grabServerPid(processList.getInputStream());
-        System.out.println(pidNum);
         server.setPid(pidNum);
         server.setServerStatus(McServer.Status.OFF);
         repo.save(server);
 
         pk.killProcess(pidNum);
-    }
-
-    @GetMapping("/server_status")
-    public String getServerStatus(){
-        return server.serverStatus.name();
-    }
-
-    @GetMapping("/delete")
-    public void delete(){
-        repo.deleteAll();
     }
 
     @PostConstruct
@@ -94,7 +88,7 @@ public class CommandController {
             server.setServerStatus(McServer.Status.OFF);
             repo.save(server);
         } else {
-            server = repo.findByServerName("McServer");
+            server = found_server;
         }
     }
 }
