@@ -51,7 +51,7 @@ public class ServerStatusController {
         if(server.serverStatus.equals(McServer.Status.ON))
             return "Server Already On";
 
-        File file = new File(serverDirectory);
+        File file = new File(System.getProperty("user.dir"));
         pb.command(startCommand);
         pb.directory(file);
 
