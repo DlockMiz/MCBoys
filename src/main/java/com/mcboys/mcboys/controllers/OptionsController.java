@@ -16,17 +16,20 @@ public class OptionsController {
         File folder = new File(System.getProperty("user.dir"));
         File[] listOfFiles = folder.listFiles();
 
+
         for (int i = 0; i < listOfFiles.length; i++) {
-            template.convertAndSend("/logs", listOfFiles[i].getName());
-            if (listOfFiles[i].getName().equals("mc_server")) {
+            if (listOfFiles[i].getName().equals("mc_server_backup")) {
                 System.out.println("File " + listOfFiles[i].getName());
                 return listOfFiles[i].getName();
             } else if (i+1 == listOfFiles.length) {
-                listOfFiles = folder.getParentFile().listFiles();
-                folder = listOfFiles[i];
+                System.out.println(folder.getName());
+                folder = listOfFiles[0].getParentFile().getParentFile();
+                System.out.println(folder.getName());
+                listOfFiles = folder.listFiles();
                 i=0;
             }
         }
-        return "Nothing";
+
+        return "Couldn't Find Folder";
     }
 }
