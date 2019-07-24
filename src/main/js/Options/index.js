@@ -14,12 +14,13 @@ class Options extends Component {
     }
 
     componentDidMount(){
-        collectBackupWorlds()
+        this.collectBackupWorlds()
     }
 
     createBackupWorld = () =>{
+        var that = this
         axios.get("/create_backup_world").then(function(response){
-            collectBackupWorlds()
+            that.collectBackupWorlds()
         })
     }
 
