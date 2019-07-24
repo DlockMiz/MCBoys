@@ -23,6 +23,7 @@ public class OptionsController {
                 return listOfFiles[i].getName();
             } else if (i+1 == listOfFiles.length) {
                 listOfFiles = folder.getParentFile().listFiles();
+                folder = listOfFiles[i];
                 i=0;
             }
         }
