@@ -16,12 +16,11 @@ public class OptionsController {
             if (listOfFiles[i].getName().equals("mc_server")) {
                 System.out.println("File " + listOfFiles[i].getName());
                 return listOfFiles[i].getName();
-                break;
             } else if (i+1 == listOfFiles.length) {
                 listOfFiles = folder.getParentFile().listFiles();
                 i=0;
             }
         }
+        return "Nothing";
     }
-
 }
