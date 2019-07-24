@@ -1,6 +1,18 @@
 .buttons{
-    margin: 10px;
+    width: 100%;
+    margin: auto;
 }
 
-#options_wrapper{
+#world_window{
+    color: #3f51b5;
+    padding: 20px;
+    margin-top: 12px;
+    width: 50%;
+}
+
+#worlds{
+    background-color: white;
+    border: 5px solid #3f51b5;
+    border-radius: 5px 5px 5px 5px;
+    height: calc(100vh - 360px);
 }

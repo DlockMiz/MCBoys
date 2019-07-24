@@ -61,7 +61,7 @@ class Home extends Component {
                     <button onClick={this.yeet}>
                         YEET
                     </button> */}
-                    <div className="column" style={{borderRight: '5px solid #3f51b5'}}>Server Status: <div style={this.state.status ? {color:'green'} : {color: 'red'}}>{this.state.status ? "Online" : "Offline"}</div>
+                    <div className="column">Server Status: <div style={this.state.status ? {color:'green'} : {color: 'red'}}>{this.state.status ? "Online" : "Offline"}</div>
                     {/* <br /> */}
                     {/* <LinearProgress color="secondary" variant="determinate" value={75} /> */}
                         <Switch
