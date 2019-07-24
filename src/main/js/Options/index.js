@@ -10,12 +10,23 @@ import './options.css'
 
 class Options extends Component {
     state = {
-        worlds: [{name: "test"}]
+        worlds: []
     }
 
     componentDidMount(){
+        collectBackupWorlds()
+    }
+
+    createBackupWorld = () =>{
+        axios.get("/create_backup_world").then(function(response){
+            collectBackupWorlds()
+        })
+    }
+
+    collectBackupWorlds = () =>{
+        var that = this
         axios.get("/get_backup_worlds").then(function(response){
-            console.log(response.data)
+            that.setState({worlds: response.data.list})
         })
     }
 
@@ -26,7 +37,7 @@ class Options extends Component {
                     Options:
                 </div>
                 <div className="buttons">
-                    <Button style={{margin: "10px"}} variant="contained" color="secondary">
+                    <Button onClick={createBackupWorld} style={{margin: "10px"}} variant="contained" color="secondary">
                         Backup World (WPA)
                     </Button>
                     <Button style={{margin: "10px"}} variant="contained" color="secondary">
@@ -48,7 +59,7 @@ class Options extends Component {
                         <TableBody>
                             {this.state.worlds.map(world => (
                             <TableRow key={world.name}>
-                                <TableCell component="th">{world.name}</TableCell>
+                                <TableCell component="th">{world}</TableCell>
                             </TableRow>
                             ))}
                         </TableBody>
