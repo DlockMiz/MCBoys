@@ -38,7 +38,7 @@ class Options extends Component {
                     Options:
                 </div>
                 <div className="buttons">
-                    <Button onClick={createBackupWorld} style={{margin: "10px"}} variant="contained" color="secondary">
+                    <Button onClick={this.createBackupWorld} style={{margin: "10px"}} variant="contained" color="secondary">
                         Backup World (WPA)
                     </Button>
                     <Button style={{margin: "10px"}} variant="contained" color="secondary">
