@@ -47,7 +47,6 @@ public class OptionsController {
     public ResponseEntity<InputStreamResource> downloadBackupWorld(HttpServletResponse response, String filename) throws Exception{
         File backupLocation = locateBackupFolder();
         File backupWorld = locateWorld(filename, backupLocation);
-        System.out.println(backupWorld.getName());
 
         InputStreamResource resource = new InputStreamResource((new FileInputStream(backupWorld)));
         return ResponseEntity.ok()
@@ -84,6 +83,9 @@ public class OptionsController {
                 folder = listOfFiles[i];
             }
         }
+
+        System.out.println(folder.getName());
+
 
         FileOutputStream fos = new FileOutputStream(folder.getName()+".zip");
         ZipOutputStream zipOut = new ZipOutputStream(fos);
