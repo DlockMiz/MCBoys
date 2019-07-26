@@ -46,7 +46,9 @@ public class OptionsController {
         File backupLocation = locateBackupFolder();
         File backupWorld = locateWorld(filename, backupLocation);
         String fullPath = System.getProperty("user.dir")+"/"+filename+".zip";
+        File file = new File(fullPath);
         byte[] bytesArray = null;
+        bytesArray = new byte[(int) file.length()];
 
         response.setStatus(HttpServletResponse.SC_OK);
         response.addHeader("Content-Disposition", "attachment; filename=test.zip");
