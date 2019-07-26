@@ -44,7 +44,7 @@ public class OptionsController {
     }
 
     @GetMapping(value = "/download_backup_world/{filename}")
-    public ResponseEntity<InputStreamResource> downloadBackupWorld(HttpServletResponse response, String filename) throws Exception{
+    public ResponseEntity<InputStreamResource> downloadBackupWorld(@PathVariable String filename) throws Exception{
         File backupLocation = locateBackupFolder();
         File backupWorld = locateWorld(filename, backupLocation);
 
