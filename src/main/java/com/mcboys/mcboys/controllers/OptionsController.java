@@ -77,8 +77,11 @@ public class OptionsController {
     public File locateWorld(String world, File backups) throws Exception{
         File folder = new File(backups.getAbsolutePath());
         File[] listOfFiles = folder.listFiles();
+        System.out.println(folder.getName());
+        System.out.println(world);
 
         for (int i = 0; i < listOfFiles.length; i++) {
+            System.out.println(listOfFiles[i].getName());
             if (listOfFiles[i].getName().equals(world)) {
                 folder = listOfFiles[i];
             }
