@@ -36,6 +36,16 @@ class Options extends Component {
         axios.get("/download_backup_world/"+"backup_Jul-25-19",{headers:{'Content-Type':'applicatioin/zip'},responseType: 'stream'}).then(function(response){
             console.log(response.data)
         })
+
+        axios({
+            method: 'get',
+            url: "/download_backup_world/"+"backup_Jul-25-19",
+            responseType: 'stream'
+          }).then(function (response) {
+            let blob = new Blob([response.data], { type: 'application/zip' }),
+            url = window.URL.createObjectURL(blob)
+            window.open(url)
+        });
     }
 
     render(){
