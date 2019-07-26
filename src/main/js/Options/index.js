@@ -31,17 +31,17 @@ class Options extends Component {
         })
     }
 
-    downloadBackupWorld = () =>{
+    downloadBackupWorld = (name) =>{
 
         axios({
-            url: "/download_backup_world/"+"backup_Jul-25-19",
+            url: "/download_backup_world/"+name,
             method: 'GET',
             responseType: 'blob', // important
           }).then((response) => {
             const url = window.URL.createObjectURL(new Blob([response.data]));
             const link = document.createElement('a');
             link.href = url;
-            link.setAttribute('download', 'file.zip');
+            link.setAttribute('download', name+'.zip');
             document.body.appendChild(link);
             link.click();
           });
@@ -57,9 +57,9 @@ class Options extends Component {
                     <Button onClick={this.createBackupWorld} style={{margin: "10px"}} variant="contained" color="secondary">
                         Backup World
                     </Button>
-                    <Button onClick={this.downloadBackupWorld} style={{margin: "10px"}} variant="contained" color="secondary">
+                    {/* <Button onClick={this.downloadBackupWorld} style={{margin: "10px"}} variant="contained" color="secondary">
                         Download World (WPA)
-                    </Button>
+                    </Button> */}
                     <Button style={{margin: "10px"}} variant="contained" color="secondary">
                         Update Server (WPA)
                     </Button>
@@ -77,6 +77,7 @@ class Options extends Component {
                             {this.state.worlds.map(world => (
                             <TableRow key={world.name}>
                                 <TableCell component="th">{world}</TableCell>
+                                <TableCell component="th"><button onClick={this.downloadBackupWorld(world)}>Download</button></TableCell>
                             </TableRow>
                             ))}
                         </TableBody>
