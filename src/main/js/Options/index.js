@@ -35,7 +35,7 @@ class Options extends Component {
         axios({
             method: 'get',
             url: "/download_backup_world/"+"backup_Jul-25-19",
-            responseType: 'arraybuffer'
+            responseType: 'blob'
           }).then(function (response) {
             let blob = new Blob([response.data], { type: 'application/zip' }),
             url = window.URL.createObjectURL(blob)
