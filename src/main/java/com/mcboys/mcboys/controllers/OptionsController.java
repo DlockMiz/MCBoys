@@ -47,8 +47,9 @@ public class OptionsController {
     public ResponseEntity<InputStreamResource> downloadBackupWorld(HttpServletResponse response, String filename) throws Exception{
         File backupLocation = locateBackupFolder();
         File backupWorld = locateWorld(filename, backupLocation);
-        InputStreamResource resource = new InputStreamResource((new FileInputStream(backupWorld)));
         System.out.println(backupWorld.getName());
+
+        InputStreamResource resource = new InputStreamResource((new FileInputStream(backupWorld)));
         return ResponseEntity.ok()
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment;filename="+backupWorld.getName())
                 .contentType(MediaType.APPLICATION_OCTET_STREAM).contentLength(backupWorld.length())
