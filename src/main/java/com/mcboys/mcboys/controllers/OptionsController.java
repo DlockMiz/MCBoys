@@ -50,7 +50,7 @@ public class OptionsController {
 
         response.setStatus(HttpServletResponse.SC_OK);
         response.addHeader("Content-Disposition", "attachment; filename=test.zip");
-        FileInputStream stream = new FileInputStream(backupWorld);
+        FileInputStream stream = new FileInputStream(fullPath);
         stream.read(bytesArray);
         return bytesArray;
     }
