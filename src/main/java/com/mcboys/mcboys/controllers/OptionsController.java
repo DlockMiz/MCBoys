@@ -4,12 +4,16 @@ import com.mcboys.mcboys.models.ServerList;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.InputStreamResource;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
+
+import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -40,16 +44,15 @@ public class OptionsController {
         return "Success";
     }
 
-    @GetMapping(value = "/download_backup_world/{filename}")
-    public ResponseEntity<FileSystemResource> downloadBackupWorld(@PathVariable String filename) throws Exception{
+    @GetMapping(value = "/download_backup_world/{filename}", produces = "application/zip")
+    public Resource downloadBackupWorld(@PathVariable String filename, HttpServletResponse response) throws Exception{
         File backupLocation = locateBackupFolder();
         File backupWorld = locateWorld(filename, backupLocation);
+        String string = "test";
 
-        FileSystemResource resource = new FileSystemResource(System.getProperty("user.dir")+"/"+filename+".zip");
-        return ResponseEntity.ok()
-                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment;filename="+backupWorld.getName())
-                .contentType(MediaType.APPLICATION_OCTET_STREAM).contentLength(backupWorld.length())
-                .body(resource);
+        Resource resource = new UrlResource(System.getProperty("user.dir")+"/"+filename+".zip");
+        response.setHeader("Content-Disposition", "attachment; filename=world.zip");
+        return resource;
     }
 
     public File locateBackupFolder(){
