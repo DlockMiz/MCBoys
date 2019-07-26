@@ -1,7 +1,6 @@
 package com.mcboys.mcboys.controllers;
 
 import com.mcboys.mcboys.models.ServerList;
-import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.InputStreamResource;
@@ -14,12 +13,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
@@ -46,21 +41,18 @@ public class OptionsController {
         return "Success";
     }
 
-    @GetMapping(value = "/download_backup_world/{filename}")
-    public void downloadBackupWorld(@PathVariable String filename, HttpServletResponse response) throws Exception{
+    @GetMapping(value = "/download_backup_world/{filename}", produces = "application/zip")
+    public byte[] downloadBackupWorld(@PathVariable String filename, HttpServletResponse response) throws Exception{
         File backupLocation = locateBackupFolder();
         File backupWorld = locateWorld(filename, backupLocation);
         String fullPath = System.getProperty("user.dir")+"/"+filename+".zip";
+        byte[] bytesArray = null;
 
-
-        response.setHeader("Content-Disposition", "attachment; filename=world.zip");
-        response.setContentType(MediaType.APPLICATION_OCTET_STREAM_VALUE);
-
-        FileInputStream inputStream = new FileInputStream(new File(fullPath));
-        ServletOutputStream outputStream = response.getOutputStream();
-        IOUtils.copy(inputStream, outputStream);
-        outputStream.close();
-        inputStream.close();
+        response.setStatus(HttpServletResponse.SC_OK);
+        response.addHeader("Content-Disposition", "attachment; filename=test.zip");
+        FileInputStream stream = new FileInputStream(backupWorld);
+        stream.read(bytesArray);
+        return bytesArray;
     }
 
     public File locateBackupFolder(){
