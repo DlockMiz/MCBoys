@@ -2,17 +2,13 @@ package com.mcboys.mcboys.controllers;
 
 import com.mcboys.mcboys.models.ServerList;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
-
-import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -48,7 +44,7 @@ public class OptionsController {
         File backupLocation = locateBackupFolder();
         File backupWorld = locateWorld(filename, backupLocation);
 
-        InputStreamResource resource = new InputStreamResource((new FileInputStream(backupWorld)));
+        InputStreamResource resource = new InputStreamResource((new FileInputStream(System.getProperty("user.dir")+filename+".zip")));
         return ResponseEntity.ok()
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment;filename="+backupWorld.getName())
                 .contentType(MediaType.APPLICATION_OCTET_STREAM).contentLength(backupWorld.length())
