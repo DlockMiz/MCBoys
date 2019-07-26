@@ -1,6 +1,7 @@
 package com.mcboys.mcboys.controllers;
 
 import com.mcboys.mcboys.models.ServerList;
+import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.InputStreamResource;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.FileInputStream;
@@ -44,15 +46,21 @@ public class OptionsController {
         return "Success";
     }
 
-    @GetMapping(value = "/download_backup_world/{filename}", produces = "application/zip")
-    public Resource downloadBackupWorld(@PathVariable String filename, HttpServletResponse response) throws Exception{
+    @GetMapping(value = "/download_backup_world/{filename}")
+    public void downloadBackupWorld(@PathVariable String filename, HttpServletResponse response) throws Exception{
         File backupLocation = locateBackupFolder();
         File backupWorld = locateWorld(filename, backupLocation);
-        String string = "test";
+        String fullPath = System.getProperty("user.dir")+"/"+filename+".zip";
 
-        Resource resource = new UrlResource(System.getProperty("user.dir")+"/"+filename+".zip");
+
         response.setHeader("Content-Disposition", "attachment; filename=world.zip");
-        return resource;
+        response.setContentType(MediaType.APPLICATION_OCTET_STREAM_VALUE);
+
+        FileInputStream inputStream = new FileInputStream(new File(fullPath));
+        ServletOutputStream outputStream = response.getOutputStream();
+        IOUtils.copy(inputStream, outputStream);
+        outputStream.close();
+        inputStream.close();
     }
 
     public File locateBackupFolder(){
