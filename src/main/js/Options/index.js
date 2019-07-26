@@ -32,15 +32,19 @@ class Options extends Component {
     }
 
     downloadBackupWorld = () =>{
+
         axios({
-            method: 'get',
             url: "/download_backup_world/"+"backup_Jul-25-19",
-            responseType: 'blob'
-          }).then(function (response) {
-            let blob = new Blob([response.data], { type: 'application/zip' }),
-            url = window.URL.createObjectURL(blob)
-            window.open(url)
-        });
+            method: 'GET',
+            responseType: 'blob', // important
+          }).then((response) => {
+            const url = window.URL.createObjectURL(new Blob([response.data]));
+            const link = document.createElement('a');
+            link.href = url;
+            link.setAttribute('download', 'file.zip');
+            document.body.appendChild(link);
+            link.click();
+          });
     }
 
     render(){
