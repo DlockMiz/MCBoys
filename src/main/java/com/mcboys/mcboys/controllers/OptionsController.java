@@ -48,6 +48,7 @@ public class OptionsController {
         File backupLocation = locateBackupFolder();
         File backupWorld = locateWorld(filename, backupLocation);
         InputStreamResource resource = new InputStreamResource((new FileInputStream(backupWorld)));
+        System.out.println(backupWorld.getName());
         return ResponseEntity.ok()
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment;filename="+backupWorld.getName())
                 .contentType(MediaType.APPLICATION_OCTET_STREAM).contentLength(backupWorld.length())
