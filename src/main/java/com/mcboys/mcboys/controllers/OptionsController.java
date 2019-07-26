@@ -2,6 +2,7 @@ package com.mcboys.mcboys.controllers;
 
 import com.mcboys.mcboys.models.ServerList;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -40,11 +41,11 @@ public class OptionsController {
     }
 
     @GetMapping(value = "/download_backup_world/{filename}")
-    public ResponseEntity<InputStreamResource> downloadBackupWorld(@PathVariable String filename) throws Exception{
+    public ResponseEntity<FileSystemResource> downloadBackupWorld(@PathVariable String filename) throws Exception{
         File backupLocation = locateBackupFolder();
         File backupWorld = locateWorld(filename, backupLocation);
 
-        InputStreamResource resource = new InputStreamResource((new FileInputStream(System.getProperty("user.dir")+"/"+filename+".zip")));
+        FileSystemResource resource = new FileSystemResource(System.getProperty("user.dir")+"/"+filename+".zip");
         return ResponseEntity.ok()
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment;filename="+backupWorld.getName())
                 .contentType(MediaType.APPLICATION_OCTET_STREAM).contentLength(backupWorld.length())
