@@ -31,6 +31,13 @@ class Options extends Component {
         })
     }
 
+    downloadBackupWorld = () =>{
+        var that = this
+        axios.get("/download_backup_world/"+"backup_Jul-25-19").then(function(response){
+            console.log(response.data)
+        })
+    }
+
     render(){
         return(
             <div>
@@ -39,9 +46,9 @@ class Options extends Component {
                 </div>
                 <div className="buttons">
                     <Button onClick={this.createBackupWorld} style={{margin: "10px"}} variant="contained" color="secondary">
-                        Backup World (WPA)
+                        Backup World
                     </Button>
-                    <Button style={{margin: "10px"}} variant="contained" color="secondary">
+                    <Button onClick={this.downloadBackupWorld} style={{margin: "10px"}} variant="contained" color="secondary">
                         Download World (WPA)
                     </Button>
                     <Button style={{margin: "10px"}} variant="contained" color="secondary">
