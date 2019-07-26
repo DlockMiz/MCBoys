@@ -31,7 +31,7 @@ class Options extends Component {
         })
     }
 
-    downloadBackupWorld = (name) =>{
+    downloadBackupWorld(name){
 
         axios({
             url: "/download_backup_world/"+name,
@@ -77,7 +77,7 @@ class Options extends Component {
                             {this.state.worlds.map(world => (
                             <TableRow key={world.name}>
                                 <TableCell component="th">{world}</TableCell>
-                                <TableCell component="th"><button onClick={this.downloadBackupWorld(world)}>Download</button></TableCell>
+                                <TableCell component="th"><button onClick={() => this.downloadBackupWorld(world)}>Download</button></TableCell>
                             </TableRow>
                             ))}
                         </TableBody>
